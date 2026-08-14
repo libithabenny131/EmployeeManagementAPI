@@ -43,5 +43,11 @@ namespace EmployeeManagementAPI.Services
             _logger.LogInformation("DeleteEmployee called for Id {Id}", id);
             return await _employeeRepository.DeleteAsync(id);
         }
+
+        public async Task<List<Employee>> SearchEmployeeAsync(string firstName)
+        {
+            _logger.LogInformation("Search Employee called using {firstName}", firstName);
+            return await _employeeRepository.SearchEmployeeAsync(firstName);
+        }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeeManagementAPI.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeeController : ControllerBase
@@ -70,6 +70,14 @@ namespace EmployeeManagementAPI.Controllers
             }
 
             return Ok("Employee deleted successfully");
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchEmployee(string firstName)
+        {
+            var employees = await _employeeService.SearchEmployeeAsync(firstName);
+
+            return Ok(employees);
         }
     }
 }

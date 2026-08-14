@@ -76,5 +76,13 @@ namespace EmployeeManagementAPI.Repositories
 
             return true;
         }
+
+        public async Task<List<Employee>> SearchEmployeeAsync(string firstName)
+        {
+            _logger.LogInformation("Search Employee using {firstName}", firstName);
+            return await _context.Employees
+                .Where(e => e.FirstName.Contains(firstName))
+                .ToListAsync();
+        }
     }
 }

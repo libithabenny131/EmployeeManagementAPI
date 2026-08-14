@@ -13,5 +13,7 @@ namespace EmployeeManagementAPI.Services
         Task<Employee?> UpdateEmployee(int id, Employee employee);
 
         Task<bool> DeleteEmployee(int id);
+
+        Task<List<Employee>> SearchEmployeeAsync(string firstName);
     }
 }
