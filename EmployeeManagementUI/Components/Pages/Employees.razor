@@ -1,0 +1,95 @@
+﻿@page "/employees"
+@inject IJSRuntime JS
+
+@using EmployeeManagementUI.Models
+@using EmployeeManagementUI.Services
+
+@inject EmployeeService EmployeeService
+
+
+<h3>Employee List</h3>
+
+@if (employees == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+
+    <p>Total Employees: @employees?.Count</p>
+    <input class="form-control"
+           placeholder="Search Employee"
+           @bind="searchText" />
+
+    <br />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Email</th>
+                <th>Salary</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var employee in employees.Where(
+            e => string.IsNullOrWhiteSpace(searchText)
+            || e.FirstName.Contains(
+                searchText,
+                StringComparison.OrdinalIgnoreCase)))
+            {
+                <tr>
+                    <td>@employee.Id</td>
+                    <td>@employee.FirstName</td>
+                    <td>@employee.Email</td>
+                    <td>@employee.Salary</td>
+                    <td>
+                        <a class="btn btn-warning"
+                           href="/edit-employee/@employee.Id">
+                           Edit
+                        </a>
+                        <button class="btn btn-danger ms-2"
+                                @onclick="() => ConfirmDelete(employee.Id)">
+                            Delete
+                        </button>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    private List<Employee>? employees;
+    private string searchText = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        employees = await EmployeeService.GetEmployees();
+    }
+
+    private async Task ConfirmDelete(int id)
+    {
+        bool confirmed = await JS.InvokeAsync<bool>(
+            "confirm",
+            "Are you sure you want to delete this employee?");
+
+        if (confirmed)
+        {
+            await DeleteEmployee(id);
+        }
+    }
+
+    private async Task DeleteEmployee(int id)
+    {
+        await EmployeeService.DeleteEmployee(id);
+
+        employees = await EmployeeService.GetEmployees();
+    }
+
+}

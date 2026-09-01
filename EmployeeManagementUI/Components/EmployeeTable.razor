@@ -1,0 +1,33 @@
+﻿<h3>EmployeeTable</h3>
+
+@using EmployeeManagementUI.Models
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Email</th>
+            <th>Salary</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var employee in Employees)
+        {
+            <tr>
+                <td>@employee.Id</td>
+                <td>@employee.FirstName</td>
+                <td>@employee.Email</td>
+                <td>@employee.Salary</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    [Parameter]
+    public List<Employee> Employees { get; set; } = new();
+}
+

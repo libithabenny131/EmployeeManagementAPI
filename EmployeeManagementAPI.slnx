@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="EmployeeManagementAPI/EmployeeManagementAPI.csproj" />
+  <Project Path="EmployeeManagementUI/EmployeeManagementUI.csproj" Id="4f637008-ca26-468f-b191-d9a3654bde38" />
 </Solution>

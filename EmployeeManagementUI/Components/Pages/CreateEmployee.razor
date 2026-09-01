@@ -1,0 +1,66 @@
+﻿@page "/create-employee"
+
+@using EmployeeManagementUI.Models
+@using EmployeeManagementUI.Services
+
+@inject EmployeeService EmployeeService
+@inject NavigationManager NavigationManager
+
+<h3>Create Employee</h3>
+
+<EditForm Model="employee"
+          OnValidSubmit="SaveEmployee">
+
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>First Name</label>
+        <InputText class="form-control"
+                   @bind-Value="employee.FirstName" />
+    </div>
+
+    <div class="mb-3">
+        <label>Last Name</label>
+        <InputText class="form-control"
+                   @bind-Value="employee.LastName" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <InputText class="form-control"
+                   @bind-Value="employee.Email" />
+    </div>
+
+    <div class="mb-3">
+        <label>Salary</label>
+        <InputNumber class="form-control"
+                     @bind-Value="employee.Salary" />
+    </div>
+
+    <button class="btn btn-primary"
+            disabled="@isSaving">
+
+        @(isSaving ? "Saving..." : "Save")
+
+    </button>
+
+</EditForm>
+
+@code
+{
+    private Employee employee = new();
+    private bool isSaving;
+
+    private async Task SaveEmployee()
+    {
+        isSaving = true;
+
+        await EmployeeService.CreateEmployee(employee);
+
+        isSaving = false;
+
+        NavigationManager.NavigateTo("/employees");
+    }
+}

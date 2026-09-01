@@ -1,0 +1,65 @@
+﻿@page "/edit-employee/{id:int}"
+
+@using EmployeeManagementUI.Models
+@using EmployeeManagementUI.Services
+
+@inject EmployeeService EmployeeService
+@inject NavigationManager NavigationManager
+
+<h3>Edit Employee</h3>
+
+@if (employee == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="mb-3">
+        <label>First Name</label>
+        <input class="form-control"
+               @bind="employee.FirstName" />
+    </div>
+
+    <div class="mb-3">
+        <label>Last Name</label>
+        <input class="form-control"
+               @bind="employee.LastName" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input class="form-control"
+               @bind="employee.Email" />
+    </div>
+
+    <div class="mb-3">
+        <label>Salary</label>
+        <input class="form-control"
+               @bind="employee.Salary" />
+    </div>
+
+    <button class="btn btn-primary"
+            @onclick="UpdateEmployee">
+        Update
+    </button>
+}
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private Employee? employee;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employee = await EmployeeService.GetEmployeeById(Id);
+    }
+
+    private async Task UpdateEmployee()
+    {
+        await EmployeeService.UpdateEmployee(Id, employee!);
+
+        NavigationManager.NavigateTo("/employees");
+    }
+}
