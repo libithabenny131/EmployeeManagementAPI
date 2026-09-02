@@ -1,4 +1,8 @@
 <Solution>
   <Project Path="EmployeeManagementAPI/EmployeeManagementAPI.csproj" />
+  <Project Path="EmployeeManagementAppHost/EmployeeManagementAppHost.ApiService/EmployeeManagementAppHost.ApiService.csproj" />
+  <Project Path="EmployeeManagementAppHost/EmployeeManagementAppHost.AppHost/EmployeeManagementAppHost.AppHost.csproj" Id="b2b62c70-5eda-4431-91cd-4bf5622dba7b" />
+  <Project Path="EmployeeManagementAppHost/EmployeeManagementAppHost.ServiceDefaults/EmployeeManagementAppHost.ServiceDefaults.csproj" />
+  <Project Path="EmployeeManagementAppHost/EmployeeManagementAppHost.Web/EmployeeManagementAppHost.Web.csproj" />
   <Project Path="EmployeeManagementUI/EmployeeManagementUI.csproj" Id="4f637008-ca26-468f-b191-d9a3654bde38" />
 </Solution>
