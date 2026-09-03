@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="EmployeeAIAssistant/EmployeeAIAssistant.csproj" Id="48c071de-cc16-4781-ad99-7900e7cb24f5" />
   <Project Path="EmployeeManagementAPI/EmployeeManagementAPI.csproj" />
   <Project Path="EmployeeManagementAppHost/EmployeeManagementAppHost.ApiService/EmployeeManagementAppHost.ApiService.csproj" />
   <Project Path="EmployeeManagementAppHost/EmployeeManagementAppHost.AppHost/EmployeeManagementAppHost.AppHost.csproj" Id="b2b62c70-5eda-4431-91cd-4bf5622dba7b" />
