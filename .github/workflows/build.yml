@@ -24,7 +24,16 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
-
+      - name: Show Environment Variable Exists
+        run: |
+          if [ -z "$APP_NAME" ]; then
+            echo "Secret missing"
+            exit 1
+          else
+            echo "Secret found"
+          fi
+        env:
+          APP_NAME: ${{ secrets.APP_NAME }}
       - name: Restore Packages
         run: dotnet restore
 
