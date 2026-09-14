@@ -1,5 +1,7 @@
 using EmployeeManagementUI.Components;
+using EmployeeManagementUI.Configurations;
 using EmployeeManagementUI.Services;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,12 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddScoped<EmployeeService>();
+builder.Services.Configure<ApiSettings>(
+    builder.Configuration.GetSection("ApiSettings"));
 
-builder.Services.AddScoped(sp =>
+builder.Services.AddHttpClient<EmployeeService>((serviceProvider, client) =>
 {
-    return new HttpClient();
+    var apiSettings =
+        serviceProvider
+            .GetRequiredService<IOptions<ApiSettings>>();
+
+    client.BaseAddress =
+        new Uri(apiSettings.Value.BaseUrl);
 });
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
