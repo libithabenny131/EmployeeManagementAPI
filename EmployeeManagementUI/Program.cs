@@ -1,43 +1,39 @@
 using EmployeeManagementUI.Components;
-using EmployeeManagementUI.Configurations;
 using EmployeeManagementUI.Services;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.Configure<ApiSettings>(
-    builder.Configuration.GetSection("ApiSettings"));
+var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"];
 
-builder.Services.AddHttpClient<EmployeeService>((serviceProvider, client) =>
+if (string.IsNullOrEmpty(apiBaseUrl))
 {
-    var apiSettings =
-        serviceProvider
-            .GetRequiredService<IOptions<ApiSettings>>();
+    throw new Exception("ApiSettings:BaseUrl is missing");
+}
 
-    client.BaseAddress =
-        new Uri(apiSettings.Value.BaseUrl);
+builder.Services.AddHttpClient<EmployeeService>(client =>
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
 });
-
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
+
 app.UseHttpsRedirection();
 
 app.UseAntiforgery();
 
 app.MapStaticAssets();
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
