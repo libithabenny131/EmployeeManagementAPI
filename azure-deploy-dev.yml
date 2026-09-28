@@ -5,16 +5,20 @@ pool:
 
 stages:
 - stage: DeployDevelopment
-  displayName: Deploy to Development
 
   jobs:
   - deployment: DeployAPI
-    displayName: Deploy API
+
     environment: Development
 
     strategy:
       runOnce:
         deploy:
           steps:
-          - script: echo Deploying API
-            displayName: Test Deployment
+
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: 'EmployeeManagement-Azure-Connection'
+              appType: 'webApp'
+              appName: 'employeemanagementapi-libitha-dev'
+              package: '$(Build.ArtifactStagingDirectory)'
