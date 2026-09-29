@@ -1,0 +1,47 @@
+name: Build EmployeeManagement Solution
+
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Show Environment Variable Exists
+        run: |
+          if [ -z "$APP_NAME" ]; then
+            echo "Secret missing"
+            exit 1
+          else
+            echo "Secret found"
+          fi
+        env:
+          APP_NAME: ${{ secrets.APP_NAME }}
+      - name: Restore Packages
+        run: dotnet restore
+
+      - name: Publish API
+        run: dotnet publish EmployeeManagementAPI/EmployeeManagementAPI.csproj -c Release -o publish
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EmployeeManagementAPI
+          path: publish
