@@ -3,22 +3,24 @@ trigger: none
 pool:
   vmImage: 'windows-latest'
 
-stages:
-- stage: DeployDevelopment
+steps:
 
-  jobs:
-  - deployment: DeployAPI
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '10.x'
 
-    environment: Development
+- script: dotnet restore
+  displayName: Restore
 
-    strategy:
-      runOnce:
-        deploy:
-          steps:
+- script: dotnet publish EmployeeManagementAPI/EmployeeManagementAPI.csproj -c Release -o $(Build.ArtifactStagingDirectory)/api
+  displayName: Publish API
 
-          - task: AzureWebApp@1
-            inputs:
-              azureSubscription: 'EmployeeManagement-Azure-Connection'
-              appType: 'webApp'
-              appName: 'employeemanagementapi-libitha-dev'
-              package: '$(Build.ArtifactStagingDirectory)'
+- task: AzureWebApp@1
+  displayName: Deploy API
+
+  inputs:
+    azureSubscription: 'EmployeeManagement-Azure-Connection'
+    appType: 'webApp'
+    appName: 'employeemanagementapi-libitha-dev'
+    package: '$(Build.ArtifactStagingDirectory)/api'
