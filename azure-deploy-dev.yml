@@ -1,0 +1,48 @@
+trigger: none
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+
+# Install .NET
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '10.x'
+
+# Restore
+- script: dotnet restore
+  displayName: 'Restore Packages'
+
+# Publish API
+- script: |
+    dotnet publish EmployeeManagementAPI/EmployeeManagementAPI.csproj \
+    -c Release \
+    -o $(Build.ArtifactStagingDirectory)/api
+  displayName: 'Publish API'
+
+# Publish UI
+- script: |
+    dotnet publish EmployeeManagementUI/EmployeeManagementUI.csproj \
+    -c Release \
+    -o $(Build.ArtifactStagingDirectory)/ui
+  displayName: 'Publish UI'
+
+# Deploy API
+- task: AzureWebApp@1
+  displayName: 'Deploy API App Service'
+  inputs:
+    azureSubscription: 'EmployeeManagement-Azure-Connection'
+    appType: 'webApp'
+    appName: 'employeemanagementapi-libitha-dev'
+    package: '$(Build.ArtifactStagingDirectory)/api'
+
+# Deploy UI
+- task: AzureWebApp@1
+  displayName: 'Deploy UI App Service'
+  inputs:
+    azureSubscription: 'EmployeeManagement-Azure-Connection'
+    appType: 'webApp'
+    appName: 'employeemanagementui-libitha-dev'
+    package: '$(Build.ArtifactStagingDirectory)/ui'
